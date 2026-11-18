@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c0b14">
+<title>Ember</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0b14;--s:#16151f;--s2:#211f2c;--t:#f6f3fa;--m:#9591a8;--a:#ff6a3d;--a2:#ff3d81;--g:linear-gradient(135deg,var(--a),var(--a2))}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(800px 480px at 85% -8%,#2b1233 0,transparent 60%) fixed,var(--bg);color:var(--t);font:15px/1.45 "Bricolage Grotesque",system-ui,sans-serif;min-height:100vh;padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+button,input{font:inherit;color:inherit}button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+.btn{padding:11px 20px;border-radius:99px;background:var(--s2);font-weight:600;display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--t);font-size:14px;white-space:nowrap}
+.btn.p{background:var(--g)}
+.pick{min-height:92vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;padding:24px;text-align:center}
+.pick h1{font-size:clamp(30px,7vw,52px);font-weight:800;letter-spacing:-.03em}
+.pg{--sz:min(26vw,124px);display:grid;grid-template-columns:repeat(3,var(--sz));gap:24px 18px;justify-content:center}
+@media(min-width:760px){.pg{grid-template-columns:repeat(4,var(--sz))}}
+.pf{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;font-weight:600;color:var(--m);transition:color .2s}
+.pf:hover{color:var(--t)}
+.av{width:var(--sz,38px);height:var(--sz,38px);border-radius:28%;display:grid;place-items:center;font-size:calc(var(--sz,38px)*.5);box-shadow:0 14px 34px #0009}
+.av.add{background:var(--s2);color:var(--m)}
+.mg .av{filter:brightness(.5)}
+.pen{position:absolute;top:calc(var(--sz)/2 - 17px);font-style:normal;font-size:30px;pointer-events:none}
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:16px;padding:calc(12px + env(safe-area-inset-top,0px)) 18px 12px;background:#0c0b14d9;backdrop-filter:blur(14px)}
+.logo{font-size:23px;font-weight:800;background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.04em}
+nav{display:flex;gap:4px;margin-right:auto}
+nav button{padding:8px 14px;border-radius:99px;color:var(--m);font-weight:600;font-size:14px}
+nav i{display:none;font-style:normal;font-size:20px}
+nav .on{color:var(--t);background:var(--s2)}
+.hav{--sz:36px}
+@media(max-width:700px){nav{position:fixed;left:0;right:0;bottom:0;margin:0;justify-content:space-around;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));background:#0f0e18f5;border-top:1px solid #ffffff12;z-index:6}nav button{display:flex;flex-direction:column;align-items:center;font-size:11px;padding:4px 14px;background:none!important}nav i{display:block}nav .on{color:var(--a)}.hav{margin-left:auto}}
+main{padding:6px 0 24px}
+h3{margin:22px 18px 10px;font-size:17px;font-weight:600}
+.ph{margin:18px;font-size:28px;font-weight:800;letter-spacing:-.02em}
+.row{display:flex;gap:12px;overflow-x:auto;padding:0 18px 6px;scrollbar-width:none}
+.card{flex:0 0 auto;width:128px;text-align:left}
+.card img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:12px;background:var(--s);display:block}
+.card span{display:block;margin-top:6px;font-size:12px;color:var(--m);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:14px;padding:0 18px}.grid .card{width:auto}
+@media(min-width:760px){.card{width:158px}}
+.hero{position:relative;height:min(52vh,420px);overflow:hidden;display:flex;align-items:flex-end}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--bg),transparent 70%)}
+.hero div{position:relative;z-index:1;padding:18px;max-width:640px;display:grid;gap:10px;justify-items:start}
+.hero h2{font-size:clamp(28px,5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.04}
+.hero p{color:#d2cfe0;font-size:14px}
+.empty{min-height:62vh;display:grid;place-content:center;justify-items:center;gap:12px;text-align:center;padding:24px;color:var(--m)}
+.empty h2{color:var(--t);font-size:24px}.empty p{max-width:340px}
+.orb{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;font-size:32px;background:var(--g);box-shadow:0 0 60px #ff3d8155}
+.inp{width:100%;padding:14px 18px;border-radius:99px;border:1px solid #ffffff14;background:var(--s);outline:0}
+.inp:focus{border-color:var(--a)}
+#q{margin:12px 18px 6px;width:calc(100% - 36px)}
+.add{display:flex;gap:10px;padding:0 18px}
+.hint{color:var(--m);font-size:13px;padding:10px 18px}.hint a,.lnk{color:var(--a);font-weight:600}
+.ad{display:flex;gap:14px;align-items:center;margin:12px 18px;padding:14px;border-radius:18px;background:var(--s)}
+.ad img{width:48px;height:48px;border-radius:12px;object-fit:cover;background:var(--s2)}
+.ad div{flex:1;min-width:0}.ad small{display:block;color:var(--m);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}.tags em{font-style:normal;font-size:11px;padding:2px 9px;border-radius:99px;background:var(--s2);color:var(--m)}
+#ov{position:fixed;inset:0;z-index:20;background:#000a;backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center}
+#ov.show{display:flex}
+.sheet{position:relative;width:min(760px,100%);max-height:92vh;overflow-y:auto;background:var(--s);border-radius:26px 26px 0 0;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+@media(min-width:760px){#ov{align-items:center}.sheet{border-radius:26px}}
+.sheet .bg{width:100%;height:220px;object-fit:cover;display:block;mask-image:linear-gradient(#000 40%,transparent)}
+.x{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:#000a;z-index:2}
+.dc{padding:0 20px;display:grid;gap:12px;margin-top:-50px;position:relative}
+.dc h2{font-size:27px;font-weight:800;line-height:1.1;letter-spacing:-.02em}
+.meta{display:flex;gap:14px;flex-wrap:wrap;color:var(--m);font-size:13px}
+.dc>.btn{justify-self:start}
+.sea{display:flex;gap:8px;overflow-x:auto}.sea .btn{padding:7px 14px;font-size:13px}.sea .on{background:var(--g)}
+.ep{display:flex;gap:12px;align-items:center;width:100%;text-align:left;padding:10px 12px;border-radius:12px;background:var(--s2);margin-bottom:6px;font-size:14px}
+.ep b{width:26px;color:var(--a)}.ep.on{outline:1px solid var(--a)}
+.st{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:14px;background:var(--s2);margin-bottom:8px}
+.st small{color:var(--a);font-weight:600}.st pre{font-family:inherit;font-size:12px;line-height:1.4;white-space:pre-wrap;word-break:break-word;color:#d6d4e2}
+.tag{font-size:11px;color:var(--m);text-align:right;max-width:90px}
+.small{padding:22px;display:grid;gap:14px}
+.prev{--sz:96px;display:grid;justify-items:center}
+.pk{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.pk button{width:42px;height:42px;border-radius:12px;background:var(--s2);font-size:20px}.pk .on{outline:2px solid var(--a)}.pk .sw{border-radius:50%;width:32px;height:32px}
+.acts{display:flex;gap:10px;justify-content:flex-end}
+#pl{position:fixed;inset:0;z-index:30;background:#000;display:flex;flex-direction:column}
+#pl video{flex:1;min-height:0;width:100%;background:#000}
+.pbar{display:flex;gap:10px;align-items:center;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:#111}.pbar span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}
+</style></head>
+<body><div id="app"></div><div id="ov"></div>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),
+safe=u=>/^https?:\/\//i.test(u||'')?esc(u):'',
+ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}},
+J=async u=>{const r=await fetch(u,{signal:AbortSignal.timeout(12e3)});if(!r.ok)throw 0;return r.json()},
+base=u=>u.replace(/\/manifest\.json.*$/,'').replace(/\/$/,'');
+const GR=['#ff6a3d,#ff3d81','#7c5cff,#3ec6ff','#00c389,#a8e063','#ffb347,#ff5e62','#f857a6,#7f5cff','#2dd4bf,#3b82f6','#f6d365,#fda085','#94a3b8,#4b6cb7'],
+EM=['😎','🦊','🐼','🚀','🎬','🌙','🔥','🐙','🎧','🦄','🍿','👾'],
+DEF=['Me','Partner','Kids','Family','Guest','Movie night'];
+let P=ld('e.p',null)||DEF.map((n,i)=>({id:'p'+i,name:n,em:EM[i],g:i})),A=ld('e.a',[]),LS=ld('e.l',{}),cur=null,tab='home',manage=false,M={},D={},dr={},tok=0;
+const av=p=>`<span class="av" style="background:linear-gradient(135deg,${GR[p.g%GR.length]})">${p.em}</span>`,
+req=c=>(c.extra||[]).some(e=>e.isRequired)||(c.extraRequired||[]).length>0,
+sch=c=>(c.extra||[]).some(e=>e.name=='search')||(c.extraSupported||[]).includes('search'),
+res=(a,r,t,i)=>{const x=(a.m.resources||[]).find(q=>(q.name||q)==r);if(!x)return false;const ty=x.types||a.m.types||[],pre=x.idPrefixes||a.m.idPrefixes;return(!ty.length||ty.includes(t))&&(!pre||pre.some(p=>i.startsWith(p)))},
+card=m=>`<button class="card" data-a="det" data-t="${esc(m.type)}" data-i="${esc(m.id)}"><img loading="lazy" alt="" src="${safe(m.poster)}"><span>${esc(m.name)}</span></button>`,
+row=(t,ms)=>{ms.forEach(m=>M[m.type+'|'+m.id]=m);return`<h3>${esc(t)}</h3><div class="row">${ms.map(card).join('')}</div>`},
+ov=h=>{$('#ov').innerHTML=h;$('#ov').className='show';document.body.style.overflow='hidden'},
+empty=()=>`<div class="empty"><div class="orb">✦</div><h2>It's empty on purpose</h2><p>${A.length?'Your addons have no catalogs. Torrentio only provides streams, so add a catalog addon (like Cinemeta) to browse and search.':'Ember has no content and no addons built in. Install the addons you choose to get started.'}</p><button class="btn p" data-a="tab" data-k="addons">Manage addons</button></div>`;
+
+function pick(){cur=null;$('#app').innerHTML=`<div class="pick"><h1>Who's watching?</h1><div class="pg ${manage?'mg':''}">${P.map(p=>`<button class="pf" data-a="${manage?'edit':'sel'}" data-id="${p.id}">${av(p)}${manage?'<i class="pen">✎</i>':''}<b>${esc(p.name)}</b></button>`).join('')}${P.length<8?`<button class="pf" data-a="add"><span class="av add">+</span><b>Add profile</b></button>`:''}</div><button class="btn" data-a="mng">${manage?'Done':'Manage profiles'}</button></div>`}
+function shell(){const p=P.find(x=>x.id==cur);$('#app').innerHTML=`<header><b class="logo">ember</b><nav>${[['home','Home','⌂'],['search','Search','⌕'],['list','My List','♡'],['addons','Addons','✦']].map(([k,l,i])=>`<button data-a="tab" data-k="${k}" class="${k==tab?'on':''}"><i>${i}</i>${l}</button>`).join('')}</nav><button class="hav" data-a="sw" aria-label="Switch profile">${av(p)}</button></header><main id="v"></main>`;render()}
+const render=()=>({home,search,list,addons})[tab]();
+
+async function home(){const v=$('#v'),my=LS[cur]||[],cs=A.flatMap(a=>(a.m.catalogs||[]).filter(c=>!req(c)).map(c=>({a,c}))).slice(0,6);
+if(!cs.length&&!my.length){v.innerHTML=empty();return}
+v.innerHTML='<div id="hero"></div>'+(my.length?row('My List',my):'')+cs.map((_,i)=>`<section id="r${i}"></section>`).join('');
+cs.forEach(async({a,c},i)=>{try{const d=await J(`${a.url}/catalog/${c.type}/${c.id}.json`),ms=(d.metas||[]).slice(0,20);if(!ms.length)return;ms.forEach(m=>m.type=m.type||c.type);$('#r'+i).innerHTML=row(`${c.name||c.id} (${c.type})`,ms);if(!$('#hero').innerHTML)hero(ms.find(m=>m.background)||ms[0])}catch{}})}
+function hero(m){M[m.type+'|'+m.id]=m;$('#hero').innerHTML=`<div class="hero"><img alt="" src="${safe(m.background||m.poster)}"><div><h2>${esc(m.name)}</h2><p>${esc((m.description||'').slice(0,140))}</p><button class="btn p" data-a="det" data-t="${esc(m.type)}" data-i="${esc(m.id)}">▶ Watch options</button></div></div>`}
+function list(){const l=LS[cur]||[];l.forEach(m=>M[m.type+'|'+m.id]=m);$('#v').innerHTML='<h2 class="ph">My List</h2>'+(l.length?`<div class="grid">${l.map(card).join('')}</div>`:'<p class="hint">Nothing saved on this profile yet. Open a title and tap “+ My List”.</p>')}
+function search(){$('#v').innerHTML='<input id="q" class="inp" type="search" placeholder="Search movies and series" autofocus><div id="sr"></div>';let tm;$('#q').oninput=e=>{clearTimeout(tm);tm=setTimeout(()=>go(e.target.value.trim()),400)};
+async function go(q){const sr=$('#sr');if(!sr)return;if(!q){sr.innerHTML='';return}const cs=A.flatMap(a=>(a.m.catalogs||[]).filter(sch).map(c=>({a,c})));
+if(!cs.length){sr.innerHTML='<p class="hint">No installed addon supports search. Add a catalog addon like Cinemeta.</p>';return}
+sr.innerHTML='<p class="hint">Searching…</p>';const seen=new Set,all=[];
+await Promise.all(cs.map(async({a,c})=>{try{const d=await J(`${a.url}/catalog/${c.type}/${c.id}/search=${encodeURIComponent(q)}.json`);(d.metas||[]).forEach(m=>{m.type=m.type||c.type;const k=m.type+m.id;if(!seen.has(k)){seen.add(k);all.push(m);M[m.type+'|'+m.id]=m}})}catch{}}));
+if($('#q')?.value.trim()!==q)return;$('#sr').innerHTML=all.length?`<div class="grid">${all.map(card).join('')}</div>`:'<p class="hint">No results.</p>'}}
+function addons(){$('#v').innerHTML=`<h2 class="ph">Addons</h2><div class="add"><input id="au" class="inp" placeholder="Paste addon link (https:// or stremio://)"><button class="btn p" data-a="inst">Install</button></div><p class="hint" id="am">For Torrentio, open <a href="https://torrentio.strem.fun/configure" target="_blank" rel="noopener">its configure page</a>, pick your options, and paste the install link here. <button class="lnk" data-a="cine">Add Cinemeta for catalogs</button></p>`+A.map((a,i)=>`<div class="ad"><img alt="" src="${safe(a.m.logo)}"><div><b>${esc(a.name)}</b> <small>${esc(a.m.description)}</small><div class="tags">${(a.m.resources||[]).map(r=>`<em>${esc(r.name||r)}</em>`).join('')}</div></div><button class="btn" data-a="rm" data-i="${i}">Remove</button></div>`).join('')}
+async function inst(u){const n=t=>{const m=$('#am');if(m)m.textContent=t};try{u=u.trim().replace(/^stremio:\/\//i,'https://');if(!/^https?:\/\//i.test(u))throw 0;const b=base(u),mf=await J(b+'/manifest.json');if(!mf.id||!mf.name)throw 0;if(!A.some(a=>a.url==b)){A.push({url:b,name:mf.name,m:mf});sv('e.a',A)}addons()}catch{n('Could not read that addon. Check the link and try again.')}}
+
+async function det(t,i){const m0=M[t+'|'+i]||{id:i,type:t,name:i};D={m:m0,sn:null};ov('<div class="sheet" id="sh"></div>');paint();
+const a=A.find(a=>res(a,'meta',t,i));if(a)try{const d=await J(`${a.url}/meta/${t}/${i}.json`);if(d.meta&&D.m.id==i){D.m={...m0,...d.meta,type:t};M[t+'|'+i]=D.m;paint()}}catch{}
+if(!(D.m.videos||[]).some(v=>v.episode!=null))streams(t,i,D.m.name)}
+function paint(){const sh=$('#sh');if(!sh)return;const m=D.m,inl=(LS[cur]||[]).some(x=>x.id==m.id),vs=(m.videos||[]).filter(v=>v.episode!=null),ss=[...new Set(vs.map(v=>v.season||0))].sort((a,b)=>(a||99)-(b||99));
+if(D.sn==null)D.sn=ss.find(s=>s>0)??ss[0];const img=m.background||m.poster;
+sh.innerHTML=`<button class="x" data-a="close" aria-label="Close">✕</button>${img?`<img class="bg" alt="" src="${safe(img)}">`:''}<div class="dc"><h2>${esc(m.name)}</h2><p class="meta">${[m.releaseInfo||m.year,m.runtime,m.imdbRating&&'★ '+m.imdbRating,(m.genres||[]).slice(0,3).join(' / ')].filter(Boolean).map(x=>`<span>${esc(x)}</span>`).join('')}</p><p>${esc(m.description)}</p><button class="btn ${inl?'':'p'}" data-a="tgl">${inl?'✓ In My List':'+ My List'}</button>${vs.length?`<div class="sea">${ss.map(s=>`<button class="btn ${s==D.sn?'on':''}" data-a="sea" data-k="${s}">${s?'Season '+s:'Specials'}</button>`).join('')}</div><div>${vs.filter(v=>(v.season||0)==D.sn).sort((a,b)=>a.episode-b.episode).map(v=>`<button class="ep" data-a="ep" data-i="${esc(v.id)}" data-n="S${v.season||0}E${v.episode}"><b>${v.episode}</b><span>${esc(v.title||v.name||'Episode '+v.episode)}</span></button>`).join('')}</div>`:''}<div id="sl"></div></div>`}
+function streams(t,i,title){const sl=$('#sl');if(!sl)return;const k=++tok,as=A.filter(a=>res(a,'stream',t,i));
+if(!as.length){sl.innerHTML='<p class="hint">No stream addon is installed for this title. Add one in Addons.</p>';return}
+sl.innerHTML='<h3 style="margin-left:0">Streams</h3><p class="hint" id="ld" style="padding-left:0">Searching…</p>';let n=0,d=0;
+as.forEach(async a=>{try{const r=await J(`${a.url}/stream/${t}/${i}.json`);if(k!=tok)return;(r.streams||[]).forEach(s=>{n++;const u=safe(s.url),x=safe(s.externalUrl);$('#sl')?.insertAdjacentHTML('beforeend',`<div class="st"><div><small>${esc(a.name)}</small><pre>${esc([s.name,s.title||s.description].filter(Boolean).join('\n'))}</pre></div>${u?`<button class="btn p" data-a="play" data-u="${u}" data-n="${esc(title)}">▶ Play</button>`:x?`<a class="btn" target="_blank" rel="noopener" href="${x}">Open</a>`:'<span class="tag">Torrent: needs a debrid service</span>'}</div>`)})}catch{}
+if(k==tok&&++d==as.length){const l=$('#ld');if(l)l.textContent=n?'':'No streams found.'}})}
+
+const act={};
+act.sel=t=>{cur=t.dataset.id;tab='home';shell()};
+act.mng=()=>{manage=!manage;pick()};
+act.sw=()=>{manage=false;pick()};
+act.add=()=>{const i=P.length,p={id:'p'+Date.now(),name:'Profile '+(i+1),em:EM[i%EM.length],g:i%GR.length};P.push(p);sv('e.p',P);pick();act.edit({dataset:{id:p.id}})};
+act.edit=t=>{dr={...P.find(x=>x.id==t.dataset.id)};ov(`<div class="sheet small"><h2>Edit profile</h2><div class="prev">${av(dr)}</div><input id="pn" class="inp" maxlength="14" value="${esc(dr.name)}"><div class="pk">${EM.map(e=>`<button data-a="pe" class="${e==dr.em?'on':''}">${e}</button>`).join('')}</div><div class="pk">${GR.map((g,i)=>`<button data-a="pg" data-k="${i}" aria-label="Color ${i+1}" class="sw ${i==dr.g?'on':''}" style="background:linear-gradient(135deg,${g})"></button>`).join('')}</div><div class="acts">${P.length>6?'<button class="btn" data-a="del">Delete</button>':''}<button class="btn p" data-a="save">Save</button></div></div>`)};
+const on=t=>{t.parentNode.querySelectorAll('.on').forEach(b=>b.classList.remove('on'));t.classList.add('on');$('.prev').innerHTML=av(dr)};
+act.pe=t=>{dr.em=t.textContent;on(t)};act.pg=t=>{dr.g=+t.dataset.k;on(t)};
+act.save=()=>{dr.name=$('#pn').value.trim()||dr.name;P=P.map(p=>p.id==dr.id?dr:p);sv('e.p',P);act.close();pick()};
+act.del=()=>{P=P.filter(p=>p.id!=dr.id);delete LS[dr.id];sv('e.p',P);sv('e.l',LS);act.close();pick()};
+act.close=()=>{const o=$('#ov');o.className='';o.innerHTML='';document.body.style.overflow='';tok++;if(cur&&tab=='list')render()};
+act.tab=t=>{tab=t.dataset.k;document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.k==tab));render()};
+act.det=t=>det(t.dataset.t,t.dataset.i);
+act.tgl=t=>{const m=D.m;let l=LS[cur]||[];const inl=l.some(x=>x.id==m.id);l=inl?l.filter(x=>x.id!=m.id):[...l,{id:m.id,type:m.type,name:m.name,poster:m.poster}];LS[cur]=l;sv('e.l',LS);t.textContent=inl?'+ My List':'✓ In My List';t.classList.toggle('p',inl)};
+act.sea=t=>{D.sn=+t.dataset.k;tok++;paint()};
+act.ep=t=>{document.querySelectorAll('.ep.on').forEach(b=>b.classList.remove('on'));t.classList.add('on');streams(D.m.type,t.dataset.i,D.m.name+' '+t.dataset.n);setTimeout(()=>$('#sl')?.scrollIntoView({behavior:'smooth',block:'nearest'}),60)};
+act.inst=()=>inst($('#au').value);act.cine=()=>inst('https://v3-cinemeta.strem.io/manifest.json');
+act.rm=t=>{A.splice(+t.dataset.i,1);sv('e.a',A);addons()};
+act.play=t=>{const d=document.createElement('div');d.id='pl';d.innerHTML=`<video controls autoplay playsinline src="${esc(t.dataset.u)}"></video><div class="pbar"><span>${esc(t.dataset.n)}</span><a class="btn" target="_blank" rel="noopener" href="${esc(t.dataset.u)}">Open externally</a><button class="btn p" data-a="stop">Close</button></div>`;document.body.append(d)};
+act.stop=()=>{const v=$('#pl video');if(v){v.pause();v.removeAttribute('src');v.load()}$('#pl')?.remove()};
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(t&&act[t.dataset.a])act[t.dataset.a](t)});
+$('#ov').addEventListener('click',e=>{if(e.target.id=='ov')act.close()});
+pick();
+</script></body></html>

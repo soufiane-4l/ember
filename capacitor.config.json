@@ -1,0 +1,7 @@
+{
+  "appId": "com.ember.app",
+  "appName": "Ember",
+  "webDir": "www",
+  "server": { "androidScheme": "https" },
+  "android": { "allowMixedContent": true }
+}
